@@ -21,7 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $tel
  * @property string $nickname
  * @property string $description
- * 
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection<Deal> $dealsAsSeller
  * @property-read \Illuminate\Database\Eloquent\Collection<Deal> $dealsAsBuyer
  * @property-read \Illuminate\Database\Eloquent\Collection<DealEvent> $dealEvents
@@ -69,7 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Deal::class, 'seller_id');
     }
-    
+
     public function dealsAsBuyer(): HasMany
     {
         return $this->hasMany(Deal::class, 'buyer_id');
