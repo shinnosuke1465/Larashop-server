@@ -48,39 +48,39 @@ class AuthService implements AuthServiceInterface
         return new OperationResult(true);
     }
 
-    // /**
-    //  * メール認証をして、認証情報が正しければユーザー本登録する
-    //  *
-    //  * @param  int  $id
-    //  * @param  int  $expires
-    //  * @param  string  $signature
-    //  * @exception InvalidSignatureException
-    //  * @exception UserAlreadyVerifiedException
-    //  * @exception UserNotFoundException
-    //  * @return AccessToken
-    //  */
-    // public function signupVerify(int $id, int $expires, string $signature): AccessToken
-    // {
-    //     if (!$this->verifySignature($id, $expires, $signature)) {
-    //         throw new InvalidSignatureException();
-    //     }
+    /**
+     * メール認証をして、認証情報が正しければユーザー本登録する
+     *
+     * @param  int  $id
+     * @param  int  $expires
+     * @param  string  $signature
+     * @exception InvalidSignatureException
+     * @exception UserAlreadyVerifiedException
+     * @exception UserNotFoundException
+     * @return AccessToken
+     */
+    public function signupVerify(int $id, int $expires, string $signature): AccessToken
+    {
+        if (!$this->verifySignature($id, $expires, $signature)) {
+            throw new InvalidSignatureException();
+        }
 
-    //     $user = User::find($id);
+        $user = User::find($id);
 
-    //     if (!$user) {
-    //         throw new UserNotFoundException();
-    //     }
+        if (!$user) {
+            throw new UserNotFoundException();
+        }
 
-    //     if ($user->hasVerifiedEmail()) {
-    //         throw new UserAlreadyVerifiedException();
-    //     }
+        if ($user->hasVerifiedEmail()) {
+            throw new UserAlreadyVerifiedException();
+        }
 
-    //     $user->markEmailAsVerified();
-    //     event(new Verified($user));
-    //     $accessToken = $user->createToken(self::API_TOKEN_NAME)->plainTextToken;
+        $user->markEmailAsVerified();
+        event(new Verified($user));
+        $accessToken = $user->createToken(self::API_TOKEN_NAME)->plainTextToken;
 
-    //     return new AccessToken($accessToken, $user);
-    // }
+        return new AccessToken($accessToken, $user);
+    }
 
     // /**
     //  * ログインする＝ログイン情報が正しければアクセストークンを返す
@@ -126,24 +126,24 @@ class AuthService implements AuthServiceInterface
     //     return new OperationResult(true);
     // }
 
-    // /**
-    //  * 認証情報が正しいか検証する
-    //  *
-    //  * @param  int  $id
-    //  * @param  int  $expires
-    //  * @param  string  $signature
-    //  * @return bool
-    //  */
-    // private function verifySignature(int $id, int $expires, string $signature): bool
-    // {
-    //     $calculatedSignature = hash_hmac(
-    //         'sha256',
-    //         $id . $expires,
-    //         config('app.key')
-    //     );
+    /**
+     * 認証情報が正しいか検証する
+     *
+     * @param  int  $id
+     * @param  int  $expires
+     * @param  string  $signature
+     * @return bool
+     */
+    private function verifySignature(int $id, int $expires, string $signature): bool
+    {
+        $calculatedSignature = hash_hmac(
+            'sha256',
+            $id . $expires,
+            config('app.key')
+        );
 
-    //     return $calculatedSignature === $signature;
-    // }
+        return $calculatedSignature === $signature;
+    }
 
     /**
      * ユーザー本登録用URLの作成
