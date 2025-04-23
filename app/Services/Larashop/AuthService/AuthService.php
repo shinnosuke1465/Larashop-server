@@ -108,23 +108,23 @@ class AuthService implements AuthServiceInterface
         return new AccessToken($plainTextToken, $user);
     }
 
-    // /**
-    //  * ログアウトする＝ユーザーの発行済みアクセストークンを削除する
-    //  *
-    //  * @return OperationResult
-    //  */
-    // public function signout(): OperationResult
-    // {
-    //     if (!Auth::check()) {
-    //         return new OperationResult(false);
-    //     }
+    /**
+     * ログアウトする＝ユーザーの発行済みアクセストークンを削除する
+     *
+     * @return OperationResult
+     */
+    public function signout(): OperationResult
+    {
+        if (!Auth::check()) {
+            return new OperationResult(false);
+        }
 
-    //     /** @var User $user **/
-    //     $user = Auth::user();
+        /** @var User $user **/
+        $user = Auth::user();
 
-    //     $user->tokens()->delete();
-    //     return new OperationResult(true);
-    // }
+        $user->tokens()->delete();
+        return new OperationResult(true);
+    }
 
     /**
      * 認証情報が正しいか検証する
