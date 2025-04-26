@@ -77,13 +77,13 @@ class ProductController extends Controller
     }
 
     /**
-     * 商品一覧取得API
+     * 商品詳細API
      *
      * @param  ShowRequest  $request
      * @return ProductResource
      */
-    // public function show(ShowRequest $request, Product $product)
-    // {
-    //     return new ProductResource($product);
-    // }
+    public function show(ShowRequest $request, Product $product)
+    {
+        return new ProductResource($product);
+    }
 }
